@@ -3,8 +3,8 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 
 
-def firefox_template(path_binary: str = None, path_driver: str = None):
-    """Creates function that will hold options for firefox webdriver instances
+def firefox_template(path_binary: str = None, path_driver: str = None) -> templates:
+    """Creates function that will hold options for firefox webdriver instances.
 
     Args:
         path_binary: path to firefox browser
@@ -14,8 +14,12 @@ def firefox_template(path_binary: str = None, path_driver: str = None):
         Function that creates firefox webdriver with given options
     """
 
-    # Function that will hold the template with given paths
-    def browser_template():
+    def browser_template() -> webdriver.Firefox:
+        """Creates a firefox webdriver with given options.
+
+        Returns:
+            Firefox webdriver with given options
+        """
 
         # Set Options
         options = Options()
