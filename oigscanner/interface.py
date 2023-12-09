@@ -5,10 +5,15 @@ import threading
 import os
 
 # Interface
-def interface(browser_template, data,
-              month=datetime.now().strftime("%B"), year=datetime.now().year,
-              log_file_name="OIG_LOGS.txt", tries=5,
-              multiple_threads=False):
+def interface(
+    browser_template,
+    data,
+    month=datetime.now().strftime("%B"),
+    year=datetime.now().year,
+    log_file_name="OIG_LOGS.txt",
+    tries=5,
+    multiple_threads=False
+    ):
 
     # Helper function to do OIG for individuals
     def do_individuals_oig(data):

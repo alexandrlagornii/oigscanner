@@ -2,10 +2,19 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 
-# Template for using oig scanner with firefox
-def firefox_template(path_binary=None, path_driver=None):
 
-    # Funcition that will hold the template with given paths
+def firefox_template(path_binary: str = None, path_driver: str = None):
+    """Creates function that will hold options for firefox webdriver instances
+
+    Args:
+        path_binary: path to firefox browser
+        path_driver: path to geckodriver
+
+    Returns:
+        Function that creates firefox webdriver with given options
+    """
+
+    # Function that will hold the template with given paths
     def browser_template():
 
         # Set Options

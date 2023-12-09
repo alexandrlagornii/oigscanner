@@ -1,6 +1,7 @@
 import os
 import re
 
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,11 +12,11 @@ class browser_wrapper:
 
     def __init__(
         self,
-        browser: webdriver.WEBDRIVER,
+        browser: webdriver,
         wait_time: int = 10,
         timeout: int = 20
         ):
-        """Set reference to an instance of a webdriver. Set time to wait for html element. Set timout.
+        """Set reference to an instance of a webdriver. Set time to wait for an html element. Set timout.
 
         Args:
             browser: instance of webdriver
@@ -34,14 +35,14 @@ class browser_wrapper:
 
 
     def __del__(self):
-        """Closes webdriver instance"""
+        """Closes webdriver instance."""
         self.BROWSER.quit()
         
 
     def check_exists(
         self,
         element_name: str,
-        attribute: By.ATTRIBUTE
+        attribute: By
         ) -> bool:
         """Checks if element exists and returns true if it does, otherwise false.
         
@@ -161,7 +162,7 @@ class browser_wrapper:
 
 
     def get(self, page: str) -> None:
-        """Given page open it with the browser
+        """Opens with the browser given page.
         
         Args:
             page: URL of the page
@@ -170,44 +171,67 @@ class browser_wrapper:
 
 
     def back(self) -> None:
-        "Go back to the previous page"
+        "Goes back to the previous page."
         self.BROWSER.back()
 
 
     def quit(self) -> None:
-        "Close browser thus quitting webdriver"
+        "Close browser thus quitting webdriver."
         self.BROWSER.quit()
 
 
 class oig_scanner(browser_wrapper):
 
-    # Initialize
-    def __init__(self, browser, wait_time=10, timeout=20, try_page=5):
-        """Opens the browser and gets the oig exclusions site"""
+    def __init__(
+        self,
+        browser: webdriver,
+        wait_time: int = 10,
+        timeout: int = 20,
+        try_page: int = 5):
+        """Opens the browser and gets the oig exclusions site.
+        
+        Args:
+            browser: instance of webdriver
+            wait_time: time to wait for an element to be found
+            timout: time to wait if nothing is happening
+            try_page: amount of times should try to get a screenshot of an individual or a company
+        """
 
-        # Open browser
+        # Initialize using parent (browser_wrapper)
         super().__init__(browser, wait_time, timeout)
-
-        # Set up constants
         self.TRY_PAGE = try_page
-
-        # Get the main website
         self.get("https://exclusions.oig.hhs.gov")
 
-    # Helper function to get back to the main page for individuals
-    def get_individuals_page(self):
-        """Gets first page of oig exclusions site"""
+
+    def get_individuals_page(self) -> None:
+        """Gets first page of oig exclusions site."""
         self.get("https://exclusions.oig.hhs.gov")
 
-    # Helper function to get back to the main page for entities
-    def get_entities_page(self):
-        """Gets first page of oig exclusions site and sets searching for entities"""
+
+    def get_entities_page(self) -> None:
+        """Gets first page of oig exclusions site and sets searching for entities."""
         self.get("https://exclusions.oig.hhs.gov")
         self.click_when_clickable("ctl00_cpExclusions_Linkbutton1", By.ID)
         
-    # Take a screenshot for an individual
-    def individual_take_screenshot(self, last_name, first_name, month, year):
-        """Takes a screenshot of an individual last name and first name"""
+
+    def individual_take_screenshot(
+        self,
+        last_name: str,
+        first_name: str,
+        month: str,
+        year: int
+        ) -> bool:
+        """Takes a screenshot of an individual last name and first name.
+        
+        Args:
+            last_name: individual's last name
+            first_name: individual's first name
+            month: month to append to the name of the screenshot
+            year: year to append to the name of the screenshot
+
+        Returns:
+            True if able to take screenshot, otherwise False
+        """
 
         # Print person
         print(f"{last_name} , {first_name}")
@@ -272,9 +296,23 @@ class oig_scanner(browser_wrapper):
         else:
             return False
 
-    # Take a screenshot for an individual
-    def entity_take_screenshot(self, entity, month, year):
-        """Takes a screenshot of an entity given its name"""
+
+    def entity_take_screenshot(
+        self,
+        entity: str,
+        month: str,
+        year: str
+        ) -> bool:
+        """Takes a screenshot of an entity given its name.
+        
+        Args:
+            entity: name of the entity
+            month: month to append to the name of the screenshot
+            year: year to append to the name of the screenshot
+
+        Returns:
+            True if able to take screenshot, otherwise false
+        """
 
         # Print entity
         print(entity)
