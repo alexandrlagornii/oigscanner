@@ -12,7 +12,7 @@ from datetime import datetime
 def interface(
     browser_template: templates,
     data: pd.DataFrame,
-    month: str =datetime.now().strftime("%B"),
+    month: str = datetime.now().strftime("%B"),
     year: int = datetime.now().year,
     log_file_name: str = "OIG_LOGS.txt",
     tries: int = 5,
@@ -65,7 +65,7 @@ def interface(
                     log.write(f"Failed for - {last_name} {first_name}\n")
 
 
-    def do_entities_oig(data: pd.dataframe) -> None:
+    def do_entities_oig(data: pd.DataFrame) -> None:
         """Helper function to do OIG for entities
 
         Args:
@@ -114,7 +114,7 @@ def interface(
             do_individuals_oig(data)
 
 
-    def multiple_threads_oig_scans():
+    def multiple_threads_oig_scans() -> None:
         """Runs oig on amount of CPU cores threads"""
         
         # Get amount of threads

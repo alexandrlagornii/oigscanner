@@ -1,9 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
+from typing import Callable
 
 
-def firefox_template(path_binary: str = None, path_driver: str = None) -> templates:
+def firefox_template(
+    path_binary: str | None = None,
+    path_driver: str | None = None
+    ) -> Callable[[str | None, str | None], webdriver.Firefox]:
     """Creates function that will hold options for firefox webdriver instances.
 
     Args:
