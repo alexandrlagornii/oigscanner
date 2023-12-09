@@ -1,20 +1,45 @@
-from oigscanner.browser.handlers import oig_scanner
-from datetime import datetime
 import numpy as np
+import pandas as pd
 import threading
 import os
 
-# Interface
-def interface(browser_template, data,
-              month=datetime.now().strftime("%B"), year=datetime.now().year,
-              log_file_name="OIG_LOGS.txt", tries=5,
-              multiple_threads=False):
+from oigscanner.browser.handlers import oig_scanner
+from oigscanner.browser import templates
+from datetime import datetime
 
-    # Helper function to do OIG for individuals
-    def do_individuals_oig(data):
+
+# Interface
+def interface(
+    browser_template: templates,
+    data: pd.DataFrame,
+    month: str = datetime.now().strftime("%B"),
+    year: int = datetime.now().year,
+    log_file_name: str = "OIG_LOGS.txt",
+    tries: int = 5,
+    multiple_threads: bool = False
+    ) -> None:
+    """Does OIG scans
+
+    Args:
+        browser_template: function that will return a browser instance
+        data: pandas dataframe with either one column (enitties) or two columns (individuals)
+        month: month to append to the name of the screenshot
+        year: year to append to the name of the screenshot
+        log_file_name: name of the file for logs
+        tries: in case of timeout or other exception tries to still take the screenshot for the given amount
+        multiple_threads: flag to show whether multiple instances of webdrivers will do the work
+    """
+
+    def do_individuals_oig(data: pd.DataFrame) -> None:
+        """Helper function to do OIG for individuals
+
+        Args:
+            data: pandas dataframe with either entities or individuals
+        """
     
         # Create browser
-        browser = oig_scanner(browser_template())
+        browser_instance = browser_template()
+        browser = oig_scanner(browser_instance)
 
         # Iterate over each individual
         for index, row in data.iterrows():
@@ -29,7 +54,8 @@ def interface(browser_template, data,
                     browser.individual_take_screenshot(last_name, first_name, month, year)
                 except Exception as e:
                     print(str(e))
-                    browser = oig_scanner(browser_template())
+                    browser_instance = browser_template()
+                    browser = oig_scanner(browser_instance)
                 else:
                     break
             
@@ -38,11 +64,17 @@ def interface(browser_template, data,
                 with open(log_file_name, "a+", encoding="utf-8") as log:
                     log.write(f"Failed for - {last_name} {first_name}\n")
 
-    # Helper function to do OIG for entities
-    def do_entities_oig(data):
+
+    def do_entities_oig(data: pd.DataFrame) -> None:
+        """Helper function to do OIG for entities
+
+        Args:
+            data: pandas dataframe with either entities or individuals
+        """
 
         # Create browser
-        browser = oig_scanner(browser_template())
+        browser_instance = browser_template()
+        browser = oig_scanner(browser_instance)
 
         # Iterate over each company
         for index, row in data.iterrows():
@@ -56,7 +88,8 @@ def interface(browser_template, data,
                     browser.entity_take_screenshot(entity, month, year)
                 except Exception as e:
                     print(str(e))
-                    browser = oig_scanner(browser_template())
+                    browser_instance = browser_template()
+                    browser = oig_scanner(browser_instance)
                 else:
                     break
 
@@ -65,8 +98,9 @@ def interface(browser_template, data,
                 with open(log_file_name, "a+", encoding="utf-8") as log:
                     log.write(f"Failed for - {entity}\n")
 
-    # Helper function for running one thread
-    def one_thread_oig_scans():
+
+    def one_thread_oig_scans() -> None:
+        """Runs OIG scans on one thread"""
 
         # Check if OIG needed for individuals or entities
         columns = len(data.columns)
@@ -79,8 +113,9 @@ def interface(browser_template, data,
         elif columns == 2:
             do_individuals_oig(data)
 
-    # Helper function for running multiple threads
-    def multiple_threads_oig_scans():
+
+    def multiple_threads_oig_scans() -> None:
+        """Runs oig on amount of CPU cores threads"""
         
         # Get amount of threads
         amount_threads = os.cpu_count()
@@ -110,6 +145,7 @@ def interface(browser_template, data,
         # Join thread
         for working_thread in working_threads:
             working_thread.join()
+
 
     # Set log start
     with open(log_file_name, "a+", encoding="utf-8") as log:

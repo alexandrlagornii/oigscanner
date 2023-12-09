@@ -1,16 +1,28 @@
+import os
+import re
+
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-import os
-import re
 
-# Browser wrapper
+
 class browser_wrapper:
 
-    # Initialize
-    def __init__(self, browser, wait_time=10, timeout=20):
-        """Set BROWSER and WAIT constant"""
+    def __init__(
+        self,
+        browser: webdriver,
+        wait_time: int = 10,
+        timeout: int = 20
+        ):
+        """Set reference to an instance of a webdriver. Set time to wait for an html element. Set timout.
+
+        Args:
+            browser: instance of webdriver
+            wait_time: time to wait for an element to be found
+            timout: time to wait if nothing is happening
+        """
 
         # Set browser
         self.BROWSER = browser
@@ -21,23 +33,47 @@ class browser_wrapper:
         # Set timout time
         self.BROWSER.set_page_load_timeout(timeout)
 
-    # Destructor
+
     def __del__(self):
+        """Closes webdriver instance."""
         self.BROWSER.quit()
         
-    # Check if element exists
-    def check_exists(self, element_name, attribute):
-        """Check if element exists and return true if it does, otherwise false"""
+
+    def check_exists(
+        self,
+        element_name: str,
+        attribute: By
+        ) -> bool:
+        """Checks if element exists and returns true if it does, otherwise false.
+        
+        Args:
+            element_name: name of an html element
+            attribute: specifies html 
+            
+        Returns:
+            True if found given element, False if not
+        """
         
         try:
             self.BROWSER.find_element(attribute, element_name)
+            return True
         except NoSuchElementException:
             return False
-        return True
-    
-    # Enter value
-    def enter_value(self, element_name, attribute, value):
-        """Enter value into the field given element and its attribute"""
+
+
+    def enter_value(
+        self,
+        element_name: str,
+        attribute: str,
+        value: str
+        ) -> None:
+        """Enters the value into the field given the name of an element and the attribute.
+        
+        Args:
+            element_name: name of an html element
+            attribute: specifies html attribute
+            value: value that we will enter into the field
+        """
 
         # Find and wait until it's clickable
         element = self.WAIT.until(EC.element_to_be_clickable((attribute, element_name)))
@@ -47,9 +83,18 @@ class browser_wrapper:
         element.clear()
         element.send_keys(value)
 
-    # Wait until is clickable and then clicking
-    def click_when_clickable(self, element_name, attribute):
-        """Click on an element when possible with given attribute"""
+
+    def click_when_clickable(
+        self,
+        element_name: str,
+        attribute: str
+        ) -> None:
+        """Click on an element when possible with given attribute.
+        
+        Args:
+            element_name: name of an html element
+            attribute: specifies html attribute
+        """
 
         # Find
         element = self.WAIT.until(EC.element_to_be_clickable((attribute, element_name)))
@@ -57,9 +102,20 @@ class browser_wrapper:
         # Click
         element.click()
     
-    # Take a screenshot of an element
-    def take_screenshot(self, element_name, attribute, path_screenshot):
-        """Takes a screenshot of an element given element name, attribute, and a path to the screenshot"""
+
+    def take_screenshot(
+        self,
+        element_name: str,
+        attribute: str,
+        path_screenshot: str
+        ) -> None:
+        """Takes a screenshot of an element given element name, attribute, and a path to the screenshot.
+        
+        Args:
+            element_name: name of an html element
+            attribute: specifies html attribute
+            path_screenshot: path of an image that will be taken
+        """
 
         # Find
         element = self.WAIT.until(EC.visibility_of_element_located((attribute, element_name)))   
@@ -67,18 +123,27 @@ class browser_wrapper:
         # Take a screenshot
         element.screenshot(path_screenshot)
 
-    # Find a unique path for a screenshot
-    def find_unique_path_screenshot(self, path_screenshot):
-        """Checks if there is a screenshot with the same name and adds number to the name if there is"""
+
+    def find_unique_path_screenshot(self, path_screenshot: str) -> bool:
+        """Checks if there is a screenshot with the same name and adds number to the name if there is.
+        
+        Args:
+            path_screenshot: path of a screenshot
+
+        Returns:
+            Unique screenshot path if found, False if not
+        """
 
         # Search for duplicates
         for i in range(1, 1_000_000_000):
+
             if (os.path.isfile(path_screenshot)):
+
                 # Remove file format
                 path_screenshot = path_screenshot.removesuffix(".png")
 
                 # Remove brackets with numbers
-                pattern = "\(\d*?\)"
+                pattern = r"\(\d*?\)"
                 path_screenshot = re.sub(pattern, "", path_screenshot)
 
                 # Remove white space
@@ -95,51 +160,78 @@ class browser_wrapper:
         else:
             return False
 
-    # Get page
-    def get(self, page):
-        "Given page open it with the browser"
+
+    def get(self, page: str) -> None:
+        """Opens with the browser given page.
+        
+        Args:
+            page: URL of the page
+        """
         self.BROWSER.get(page)
 
-    # Get previous page
-    def back(self):
-        "Go back to the previous page"
+
+    def back(self) -> None:
+        "Goes back to the previous page."
         self.BROWSER.back()
 
-    # Quit webdriver
-    def quit(self):
-        "Close browser thus quitting webdriver"
+
+    def quit(self) -> None:
+        "Close browser thus quitting webdriver."
         self.BROWSER.quit()
 
-# OIG Scanner
+
 class oig_scanner(browser_wrapper):
 
-    # Initialize
-    def __init__(self, browser, wait_time=10, timeout=20, try_page=5):
-        """Opens the browser and gets the oig exclusions site"""
+    def __init__(
+        self,
+        browser: webdriver,
+        wait_time: int = 10,
+        timeout: int = 20,
+        try_page: int = 5):
+        """Opens the browser and gets the oig exclusions site.
+        
+        Args:
+            browser: instance of webdriver
+            wait_time: time to wait for an element to be found
+            timout: time to wait if nothing is happening
+            try_page: amount of times should try to get a screenshot of an individual or a company
+        """
 
-        # Open browser
+        # Initialize using parent (browser_wrapper)
         super().__init__(browser, wait_time, timeout)
-
-        # Set up constants
         self.TRY_PAGE = try_page
-
-        # Get the main website
         self.get("https://exclusions.oig.hhs.gov")
 
-    # Helper function to get back to the main page for individuals
-    def get_individuals_page(self):
-        """Gets first page of oig exclusions site"""
+
+    def get_individuals_page(self) -> None:
+        """Gets first page of oig exclusions site."""
         self.get("https://exclusions.oig.hhs.gov")
 
-    # Helper function to get back to the main page for entities
-    def get_entities_page(self):
-        """Gets first page of oig exclusions site and sets searching for entities"""
+
+    def get_entities_page(self) -> None:
+        """Gets first page of oig exclusions site and sets searching for entities."""
         self.get("https://exclusions.oig.hhs.gov")
         self.click_when_clickable("ctl00_cpExclusions_Linkbutton1", By.ID)
         
-    # Take a screenshot for an individual
-    def individual_take_screenshot(self, last_name, first_name, month, year):
-        """Takes a screenshot of an individual last name and first name"""
+
+    def individual_take_screenshot(
+        self,
+        last_name: str,
+        first_name: str,
+        month: str,
+        year: int
+        ) -> bool:
+        """Takes a screenshot of an individual last name and first name.
+        
+        Args:
+            last_name: individual's last name
+            first_name: individual's first name
+            month: month to append to the name of the screenshot
+            year: year to append to the name of the screenshot
+
+        Returns:
+            True if able to take screenshot, otherwise False
+        """
 
         # Print person
         print(f"{last_name} , {first_name}")
@@ -204,9 +296,23 @@ class oig_scanner(browser_wrapper):
         else:
             return False
 
-    # Take a screenshot for an individual
-    def entity_take_screenshot(self, entity, month, year):
-        """Takes a screenshot of an entity given its name"""
+
+    def entity_take_screenshot(
+        self,
+        entity: str,
+        month: str,
+        year: str
+        ) -> bool:
+        """Takes a screenshot of an entity given its name.
+        
+        Args:
+            entity: name of the entity
+            month: month to append to the name of the screenshot
+            year: year to append to the name of the screenshot
+
+        Returns:
+            True if able to take screenshot, otherwise false
+        """
 
         # Print entity
         print(entity)

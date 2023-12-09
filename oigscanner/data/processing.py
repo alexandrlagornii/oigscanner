@@ -1,6 +1,15 @@
-# Normalize data for doing OIG scans
-def normalize_data_oig(data):
-    """Given pandaframe with data, normalize it for usage in oig scans"""
+import pandas as pd 
+
+
+def normalize_data_oig(data: pd.DataFrame) -> pd.DataFrame:
+    """Given pandas dataframe with data, normalize it for usage in oig scans.
+    
+    Args:
+        data: pandas dataframe with either two columns or one
+
+    Returns:
+        Pandas dataframe with normalized data
+    """
 
     # Get columns
     columns = len(data.columns)
