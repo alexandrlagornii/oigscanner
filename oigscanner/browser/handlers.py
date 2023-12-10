@@ -7,6 +7,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
+from typing import Union
+
 
 class browser_wrapper:
 
@@ -53,7 +55,7 @@ class browser_wrapper:
         Returns:
             True if found given element, False if not
         """
-        
+
         try:
             self.BROWSER.find_element(attribute, element_name)
             return True
@@ -101,7 +103,7 @@ class browser_wrapper:
     
         # Click
         element.click()
-    
+
 
     def take_screenshot(
         self,
@@ -124,7 +126,7 @@ class browser_wrapper:
         element.screenshot(path_screenshot)
 
 
-    def find_unique_path_screenshot(self, path_screenshot: str) -> bool:
+    def find_unique_path_screenshot(self, path_screenshot: str) -> Union[bool, str]:
         """Checks if there is a screenshot with the same name and adds number to the name if there is.
         
         Args:

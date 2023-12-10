@@ -10,7 +10,6 @@ from datetime import datetime
 from typing import Union
 
 
-# Interface
 def interface(
     browser_template: templates,
     data: pd.DataFrame,
