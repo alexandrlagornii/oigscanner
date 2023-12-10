@@ -38,8 +38,11 @@ def interface(
         """
     
         # Create browser
-        browser_instance = browser_template()
-        browser = oig_scanner(browser_instance)
+        try:
+            browser_instance = browser_template()
+            browser = oig_scanner(browser_instance)
+        except Exception as e:
+            print(str(e))
 
         # Iterate over each individual
         for index, row in data.iterrows():
@@ -73,8 +76,11 @@ def interface(
         """
 
         # Create browser
-        browser_instance = browser_template()
-        browser = oig_scanner(browser_instance)
+        try:
+            browser_instance = browser_template()
+            browser = oig_scanner(browser_instance)
+        except Exception as e:
+            print(str(e))
 
         # Iterate over each company
         for index, row in data.iterrows():
