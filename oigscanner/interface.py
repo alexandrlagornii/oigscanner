@@ -5,7 +5,9 @@ import os
 
 from oigscanner.browser.handlers import oig_scanner
 from oigscanner.browser import templates
+from selenium import webdriver
 from datetime import datetime
+from typing import Union
 
 
 # Interface
@@ -30,6 +32,17 @@ def interface(
         multiple_threads: flag to show whether multiple instances of webdrivers will do the work
     """
 
+    def create_browser() -> Union[webdriver, None]:
+        """Helper function that will create oig scanner with an instance of a webdriver from a given template"""
+        try:
+            browser_instance = browser_template()
+            browser = oig_scanner(browser_instance)
+            return browser
+        except Exception as e:
+            print(str(e))
+            return None
+
+
     def do_individuals_oig(data: pd.DataFrame) -> None:
         """Helper function to do OIG for individuals
 
@@ -38,11 +51,7 @@ def interface(
         """
     
         # Create browser
-        try:
-            browser_instance = browser_template()
-            browser = oig_scanner(browser_instance)
-        except Exception as e:
-            print(str(e))
+        browser = create_browser()
 
         # Iterate over each individual
         for index, row in data.iterrows():
@@ -57,8 +66,7 @@ def interface(
                     browser.individual_take_screenshot(last_name, first_name, month, year)
                 except Exception as e:
                     print(str(e))
-                    browser_instance = browser_template()
-                    browser = oig_scanner(browser_instance)
+                    browser = create_browser()
                 else:
                     break
             
@@ -76,11 +84,7 @@ def interface(
         """
 
         # Create browser
-        try:
-            browser_instance = browser_template()
-            browser = oig_scanner(browser_instance)
-        except Exception as e:
-            print(str(e))
+        browser = create_browser()
 
         # Iterate over each company
         for index, row in data.iterrows():
@@ -94,8 +98,7 @@ def interface(
                     browser.entity_take_screenshot(entity, month, year)
                 except Exception as e:
                     print(str(e))
-                    browser_instance = browser_template()
-                    browser = oig_scanner(browser_instance)
+                    browser = create_browser()
                 else:
                     break
 

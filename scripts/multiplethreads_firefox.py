@@ -2,8 +2,8 @@ import pandas as pd
 import sys
 
 from oigscanner.browser.templates import firefox_template
-from oigscanner.interface import interface
 from oigscanner.data.processing import normalize_data_oig
+from oigscanner.interface import interface
 
 
 # Set paths
