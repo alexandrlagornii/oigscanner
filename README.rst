@@ -20,13 +20,13 @@ Installation
 -------------------------
 1. Run "pip install -r requirements.txt"
 2. Run "pip install ." in the folder with "setup.py".
-3. Install **firefox portable** and **geckodriver**, then put them in the same folder with scripts.
+3. Install **firefox portable** and **geckodriver**, then put them in the same folder with scripts. (If using scripts in the repository)
 
 -------------------------
 Usage
 -------------------------
 The entry point are python scripts in the scripts folder. Provided you installed everything correctly, the folder should look like this.
-.. image:: ..docs/img/layout.png
+.. image:: docs/img/layout.png
   :width: 400
   :alt: Alternative text
 
