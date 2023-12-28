@@ -286,7 +286,7 @@ class oig_scanner(browser_wrapper):
             unique_path_screenshot = self.find_unique_path_screenshot(path_screenshot)
             if (unique_path_screenshot):
                 # Take a screenshot
-                self.take_screenshot("content", By.ID, path_screenshot)
+                self.take_screenshot("content", By.ID, unique_path_screenshot)
                 
                 # Return to the search page
                 self.back()
@@ -364,7 +364,7 @@ class oig_scanner(browser_wrapper):
             unique_path_screenshot = self.find_unique_path_screenshot(path_screenshot)
             if (unique_path_screenshot):
                 # Take a screenshot
-                self.take_screenshot("content", By.ID, path_screenshot)
+                self.take_screenshot("content", By.ID, unique_path_screenshot)
                 
                 # Return to the search page
                 self.back()
