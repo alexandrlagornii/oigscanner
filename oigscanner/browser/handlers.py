@@ -196,7 +196,7 @@ class oig_scanner(browser_wrapper):
             browser: instance of webdriver
             wait_time: time to wait for an element to be found
             timout: time to wait if nothing is happening
-            try_page: amount of times should try to get a screenshot of an individual or a company
+            try_page: number of times should try to get a screenshot of an individual or a company
         """
 
         # Initialize using parent (browser_wrapper)

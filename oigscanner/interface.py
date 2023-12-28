@@ -28,7 +28,7 @@ def interface(
         month: month to append to the name of the screenshot
         year: year to append to the name of the screenshot
         log_file_name: name of the file for logs
-        tries: in case of timeout or other exception tries to still take the screenshot for the given amount
+        tries: in case of timeout or other exception tries to still take the screenshot for the given number
         multiple_threads: flag to show whether multiple instances of webdrivers will do the work
     """
 
@@ -106,9 +106,9 @@ def interface(
 
 
     def run_oig_scans() -> None:
-        """Runs oig on amount of CPU cores threads"""
+        """Runs oig with given number of threads"""
         
-        # Split the data into given amount of chunks
+        # Split the data into given number of chunks
         data_chunks = np.array_split(data, number_threads)
         print(data_chunks)
 
@@ -139,7 +139,7 @@ def interface(
     with open(log_file_name, "a+", encoding="utf-8") as log:
         log.write(f"START at {datetime.now()}\n")
 
-    # Run the scanner with given amount of threads
+    # Run the scanner with given number of threads
     run_oig_scans()
 
     # End log and finish

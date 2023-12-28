@@ -28,11 +28,14 @@ def firefox_template(
 
         # Set Options
         options = Options()
-        options.binary_location = path_binary
+        if path_binary:
+            options.binary_location = path_binary
         options.add_argument("--headless")
 
         # Set Service
-        service = Service(path_driver)
+        service = Service()
+        if path_driver:
+            service = Service(path_driver)
 
         # Create browser instance and maximize
         browser = webdriver.Firefox(options=options, service=service)
