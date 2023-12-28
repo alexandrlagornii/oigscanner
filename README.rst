@@ -26,7 +26,7 @@ Installation
 Usage
 -------------------------
 The entry point are python scripts in the scripts folder. Provided you installed everything correctly, the folder should look like this
-.. figure:: docs/img/layout.png
+.. figure:: layout.png
     :alt: Layout of Folder
 
 
