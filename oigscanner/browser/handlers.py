@@ -126,7 +126,7 @@ class browser_wrapper:
         element.screenshot(path_screenshot)
 
 
-    def find_unique_path_screenshot(self, path_screenshot: str) -> Union[str, bool]:
+    def find_unique_path_screenshot(self, path_screenshot: str) -> str:
         """Checks if there is a screenshot with the same name and adds number to the name if there is.
         
         Args:
@@ -154,13 +154,11 @@ class browser_wrapper:
                 # Make new name
                 path_screenshot += "(" + str(i) + ")"
                 path_screenshot += ".png"
-        
+            
             else:
                 return path_screenshot
-        
-        # If couldn't get unique name
-        else:
-            return False
+
+        return path_screenshot
 
 
     def get(self, page: str) -> None:
