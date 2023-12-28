@@ -1,7 +1,7 @@
 import os
 import re
 
-from selenium import webdriver
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -14,7 +14,7 @@ class browser_wrapper:
 
     def __init__(
         self,
-        browser: webdriver,
+        browser: WebDriver,
         wait_time: int = 10,
         timeout: int = 20
         ):
@@ -36,7 +36,7 @@ class browser_wrapper:
         self.BROWSER.set_page_load_timeout(timeout)
 
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Closes webdriver instance."""
         self.BROWSER.quit()
         
@@ -44,7 +44,7 @@ class browser_wrapper:
     def check_exists(
         self,
         element_name: str,
-        attribute: By
+        attribute: str
         ) -> bool:
         """Checks if element exists and returns true if it does, otherwise false.
         
@@ -126,7 +126,7 @@ class browser_wrapper:
         element.screenshot(path_screenshot)
 
 
-    def find_unique_path_screenshot(self, path_screenshot: str) -> Union[bool, str]:
+    def find_unique_path_screenshot(self, path_screenshot: str) -> Union[str, bool]:
         """Checks if there is a screenshot with the same name and adds number to the name if there is.
         
         Args:
@@ -152,7 +152,7 @@ class browser_wrapper:
                 path_screenshot = path_screenshot.strip()
                 
                 # Make new name
-                path_screenshot += " (" + str(i) + ")"
+                path_screenshot += "(" + str(i) + ")"
                 path_screenshot += ".png"
         
             else:
@@ -186,7 +186,7 @@ class oig_scanner(browser_wrapper):
 
     def __init__(
         self,
-        browser: webdriver,
+        browser: WebDriver,
         wait_time: int = 10,
         timeout: int = 20,
         try_page: int = 5):
@@ -282,17 +282,17 @@ class oig_scanner(browser_wrapper):
                 path_screenshot += " CHECK"
             path_screenshot += ".png"
 
-            # Check if there is a duplicate and make a copy with number indicating its appearance
-            path_screenshot = self.find_unique_path_screenshot(path_screenshot)
-            
-            # Take a screenshot
-            self.take_screenshot("content", By.ID, path_screenshot)
-            
-            # Return to the search page
-            self.back()
+            # Find unique screenshot path and make a screenshot
+            unique_path_screenshot = self.find_unique_path_screenshot(path_screenshot)
+            if (unique_path_screenshot):
+                # Take a screenshot
+                self.take_screenshot("content", By.ID, path_screenshot)
+                
+                # Return to the search page
+                self.back()
 
-            # Return True if everything is okay
-            return True
+                # Return True if everything is okay
+                return True
 
         # Otherwise False
         else:
@@ -303,7 +303,7 @@ class oig_scanner(browser_wrapper):
         self,
         entity: str,
         month: str,
-        year: str
+        year: int
         ) -> bool:
         """Takes a screenshot of an entity given its name.
         
@@ -360,17 +360,17 @@ class oig_scanner(browser_wrapper):
                 path_screenshot += " CHECK"
             path_screenshot += ".png"
 
-            # Check if there is a duplicate and make a copy with number indicating its appearance
-            path_screenshot = self.find_unique_path_screenshot(path_screenshot)
+            # Find unique screenshot path and make a screenshot
+            unique_path_screenshot = self.find_unique_path_screenshot(path_screenshot)
+            if (unique_path_screenshot):
+                # Take a screenshot
+                self.take_screenshot("content", By.ID, path_screenshot)
+                
+                # Return to the search page
+                self.back()
 
-            # Take a screenshot
-            self.take_screenshot("content", By.ID, path_screenshot)
-
-            # Return to the search page
-            self.back()
-
-            # Return True if everything is okay
-            return True
+                # Return True if everything is okay
+                return True
 
         # Otherwise False
         else:

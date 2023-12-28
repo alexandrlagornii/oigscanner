@@ -1,13 +1,14 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
+
 from typing import Callable
 
 
 def firefox_template(
-    path_binary: str | None = None,
-    path_driver: str | None = None
-    ) -> Callable[[str | None, str | None], webdriver.Firefox]:
+    path_binary: str = "",
+    path_driver: str = ""
+    ) -> Callable[[], webdriver.Firefox]:
     """Creates function that will hold options for firefox webdriver instances.
 
     Args:
@@ -27,8 +28,7 @@ def firefox_template(
 
         # Set Options
         options = Options()
-        if path_binary:
-            options.binary_location = path_binary
+        options.binary_location = path_binary
         options.add_argument("--headless")
 
         # Set Service

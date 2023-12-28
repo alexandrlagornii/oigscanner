@@ -1,23 +1,24 @@
 import numpy as np
 import pandas as pd
 import threading
-import os
 
+from selenium.webdriver.remote.webdriver import WebDriver
 from oigscanner.browser.handlers import oig_scanner
 from oigscanner.browser import templates
-from selenium import webdriver
 from datetime import datetime
+
 from typing import Union
+from typing import Callable
 
 
 def interface(
-    browser_template: templates,
+    browser_template: Callable[[], WebDriver],
     data: pd.DataFrame,
     month: str = datetime.now().strftime("%B"),
     year: int = datetime.now().year,
     log_file_name: str = "OIG_LOGS.txt",
     tries: int = 5,
-    multiple_threads: bool = False
+    number_threads: int = 1
     ) -> None:
     """Does OIG scans
 
@@ -31,15 +32,12 @@ def interface(
         multiple_threads: flag to show whether multiple instances of webdrivers will do the work
     """
 
-    def create_browser() -> Union[webdriver, None]:
+    def create_browser() -> Union[oig_scanner]:
         """Helper function that will create oig scanner with an instance of a webdriver from a given template"""
-        try:
-            browser_instance = browser_template()
-            browser = oig_scanner(browser_instance)
-            return browser
-        except Exception as e:
-            print(str(e))
-            return None
+
+        browser_instance = browser_template()
+        browser = oig_scanner(browser_instance)
+        return browser
 
 
     def do_individuals_oig(data: pd.DataFrame) -> None:
@@ -107,29 +105,11 @@ def interface(
                     log.write(f"Failed for - {entity}\n")
 
 
-    def one_thread_oig_scans() -> None:
-        """Runs OIG scans on one thread"""
-
-        # Check if OIG needed for individuals or entities
-        columns = len(data.columns)
-
-        # If one column => OIG scans for entities
-        if columns == 1:
-            do_entities_oig(data)
-
-        # If two columns => OIG scans for individuals
-        elif columns == 2:
-            do_individuals_oig(data)
-
-
-    def multiple_threads_oig_scans() -> None:
+    def run_oig_scans() -> None:
         """Runs oig on amount of CPU cores threads"""
         
-        # Get amount of threads
-        amount_threads = os.cpu_count()
-
         # Split the data into given amount of chunks
-        data_chunks = np.array_split(data, amount_threads)
+        data_chunks = np.array_split(data, number_threads)
         print(data_chunks)
 
         # Check if OIG needed for individuals or entities
@@ -143,7 +123,7 @@ def interface(
 
         # Make threads on each chunk
         working_threads = []
-        for i in range(amount_threads):
+        for i in range(number_threads):
             working_threads.append(threading.Thread(target=thread_function, args=(data_chunks[i],)))
 
         # Start threads
@@ -160,10 +140,7 @@ def interface(
         log.write(f"START at {datetime.now()}\n")
 
     # Run the scanner with given amount of threads
-    if (multiple_threads):
-        multiple_threads_oig_scans()
-    else:
-        one_thread_oig_scans()
+    run_oig_scans()
 
     # End log and finish
     with open(log_file_name, "a+", encoding="utf-8") as log:
