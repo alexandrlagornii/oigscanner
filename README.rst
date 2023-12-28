@@ -16,15 +16,23 @@ finds them in Exclusions Database and takes a screenshot in the format "<**last 
 person later can verify if the given individual or entity works with them.
 
 -------------------------
-Installation and Usage
+Installation
 -------------------------
-Run "pip install ." in the folder with "setup.py". If running using scripts or distribution, then install **firefox portable**
-and **geckodriver**. Put them in the same folder with scripts. Then run the script with **xlsx** or **xls** file for data as a command-line argument.
-If using distribution **exe** file, then can just drag and drop data file into the **exe** file.
+1. Run "pip install -r requirements.txt"
+2. Run "pip install ." in the folder with "setup.py".
+3. Install **firefox portable** and **geckodriver**, then put them in the same folder with scripts.
+
+-------------------------
+Usage
+-------------------------
+The entry point are python scripts in the scripts folder. Provided you installed everything correctly, the folder should look like this.
+.. image:: ..docs/img/layout.png
+  :width: 400
+  :alt: Alternative text
 
 -------------------------
 Features
 -------------------------
 - can use multiple browsers and webdrivers (needs to be implemented in templates.py)
 - can use different month and year if needed
-- can use multiple threads (amount of cpu cores)
+- can use multiple threads
