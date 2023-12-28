@@ -27,8 +27,7 @@ Usage
 -------------------------
 The entry point are python scripts in the scripts folder. Provided you installed everything correctly, the folder should look like this.
 .. image:: docs/img/layout.png
-  :width: 400
-  :alt: Alternative text
+
 
 -------------------------
 Features
