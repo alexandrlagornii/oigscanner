@@ -27,10 +27,8 @@ Usage
 -------------------------
 The entry point are python scripts in the scripts folder. Provided you installed everything correctly, the folder should look like this.
 
-
 .. figure:: docs/img/layout.png
     :alt: Folder Layout (scripts.py, geckodriver.exe, FirefoxPortable)
-
 
 You can choose to either run scans for individuals or entities. Excel file should be either **xls** or **xlsx** format.
 It should have either **two columns** (<**last name**> <**first name**> - **EXACTLY THIS ORDER**) for individuals
@@ -38,19 +36,16 @@ or **one column** (<**entity name**>) for entities
 
 Example of how it should be. On the left from the right line example for individuals, on the right for entities
 
-
 .. figure:: docs/img/excel-formatting.png
     :alt: Excel Formatting for Individuals and entities
-
 
 After that run "python <**script**> <**excel file**>"
 
 It will show you the entities or individuals that the program is going to scan. After that the folder named
 "screenshots_individuals" or "screenshots_entities" will appear, where screenshots will be saved
 
-There is two type of screenshots. One with the word **CHECK** and the other without it. **CHECK** means
+There is two types of screenshots. One with the word **CHECK** and the other without it. **CHECK** means
 that the person or entity was found in the exclusion database and should be further investigated by the compliance.
-
 
 .. figure:: docs/img/types-screenshots.png
     :alt: Screenshots with CHECK and without
