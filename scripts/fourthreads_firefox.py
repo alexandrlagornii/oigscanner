@@ -1,6 +1,5 @@
 import pandas as pd
 import sys
-import os
 
 from oigscanner.browser.templates import firefox_template
 from oigscanner.data.processing import normalize_data_oig
