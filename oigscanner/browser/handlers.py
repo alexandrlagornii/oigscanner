@@ -414,7 +414,7 @@ class oig_scanner(browser_wrapper):
                 self.create_log_entry(log_entry)
 
 
-        # Take a screenshot of either entities or individuals
+        # Take a screenshot of either an entitiy or an individual
         data_len = len(data)
         if data_len == 1:
             entity = data.iloc[0]
