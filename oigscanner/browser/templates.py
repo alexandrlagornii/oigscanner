@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
-
 from typing import Callable
 
 
@@ -30,7 +29,7 @@ def firefox_template(
         options = Options()
         if path_binary:
             options.binary_location = path_binary
-        options.add_argument("--headless")
+        #options.add_argument("--headless")
 
         # Set Service
         service = Service()

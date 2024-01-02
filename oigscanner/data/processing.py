@@ -25,5 +25,4 @@ def normalize_data_oig(data: pd.DataFrame) -> pd.DataFrame:
         data = data.map(str.title)         
 
     # Print and return
-    print(data)
     return data
