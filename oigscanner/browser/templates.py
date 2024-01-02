@@ -29,7 +29,7 @@ def firefox_template(
         options = Options()
         if path_binary:
             options.binary_location = path_binary
-        #options.add_argument("--headless")
+        options.add_argument("--headless")
 
         # Set Service
         service = Service()
