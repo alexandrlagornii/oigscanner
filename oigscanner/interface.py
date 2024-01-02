@@ -26,7 +26,7 @@ def interface(
         number_threads: number of threads to use in doing oig scans
     """
 
-    def scan_oig(data_chunk: pd.DataFrame) -> None:
+    def oig_scan(data_chunk: pd.DataFrame) -> None:
         """Helper function that creates instance of oig scanner and takes a screenshot with given data"""
         oig = oig_scanner(browser_template)
         data_chunk.apply(oig.take_oig_screenshot, args=(month,year), axis=1)
@@ -42,12 +42,12 @@ def interface(
     # Make threads on each chunk
     working_threads = []
     for i in range(number_threads):
-        working_threads.append(threading.Thread(target=scan_oig, args=(data_chunks[i],)))
+        working_threads.append(threading.Thread(target=oig_scan, args=(data_chunks[i],)))
 
     # Start threads
     for working_thread in working_threads:
         working_thread.start()
 
-    # Join thread
+    # Join threads
     for working_thread in working_threads:
         working_thread.join()
