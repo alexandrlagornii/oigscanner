@@ -44,7 +44,7 @@ After that run "python <**script**> <**excel file**>"
 It will show you the entities or individuals that the program is going to scan. After that the folder named
 "screenshots_individuals" or "screenshots_entities" will appear, where screenshots will be saved
 
-There is two types of screenshots. One with the word **CHECK** and the other without it. **CHECK** means
+There are two types of screenshots. One with the word **CHECK** and the other without it. **CHECK** means
 that the person or entity was found in the exclusion database and should be further investigated by the compliance.
 
 .. figure:: docs/img/types-screenshots.png
